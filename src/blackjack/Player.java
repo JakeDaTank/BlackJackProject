@@ -1,7 +1,7 @@
 package blackjack;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 
 public class Player {
 	private List<Card> playerHand = new ArrayList<>();
@@ -12,18 +12,10 @@ public class Player {
 		return playerHand;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append(this.name + " your hand is is");
-		builder.append(playerHand + "\nYour total is: " +this.playerHandValue);
-		return builder.toString();
-	}
-	public boolean playerBustCheck(){
+	public boolean playerBustCheck() {
 		if (playerHandValue > 21) {
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
 	}
@@ -48,6 +40,22 @@ public class Player {
 
 	public int getPlayerHandValue() {
 		return playerHandValue;
+	}
+
+	public void showPlayerHand() {
+		System.out.println("\t***Your Hand***");
+		for (int i = 0; i < playerHand.size(); i++) {
+			System.out.println(playerHand.get(i).toString());
+		}
+		System.out.println("Total hand count : " + playerHandValue);
+	}
+	public boolean playerBlackjack(){
+		if (playerHandValue == 21) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 }

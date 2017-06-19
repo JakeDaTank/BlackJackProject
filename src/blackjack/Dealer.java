@@ -16,6 +16,12 @@ public class Dealer {
 	public Card showDraw1(){
 		return dealerHand.get(0);
 	}
+	public void showDealerHand(){
+		for (int i = 0; i < dealerHand.size(); i++) {
+		 System.out.println(dealerHand.get(i).toString());
+		}
+		System.out.println("Dealer count is :" + dealerHandValue);
+	}
 
 	public void discard() {
 		dealerHand = new ArrayList<>();
@@ -47,5 +53,8 @@ public class Dealer {
 		else{
 			return false;
 		}
+	}
+	public int getDealerHandValue() {
+		return dealerHandValue;
 	}
 }

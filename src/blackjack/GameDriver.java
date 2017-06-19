@@ -4,10 +4,13 @@ import java.util.*;
 
 public class GameDriver {
 	Scanner kb = new Scanner(System.in);
+
 	private Dealer dealer = new Dealer();
 	private Deck d1 = new Deck();
-	private List<Card> localDeck = new ArrayList<>();
 	private Player p1 = new Player();
+
+	private List<Card> localDeck = new ArrayList<>();
+	private int turnNumber, playerRoundWins, dealerRoundWins;
 
 	public void setUpGame() {
 
@@ -20,39 +23,56 @@ public class GameDriver {
 	}
 
 	public void playGame() {
-		int turnNumber = 1;
-		int playerRoundWins = 0;
-		int dealerRoundWins = 0;
 
-		if (playerRoundWins + dealerRoundWins == 0) {
+		if ((playerRoundWins + dealerRoundWins) == 0) {
+			turnNumber = 1;
 			setUpGame();
-			
+
 		}
-		if (playerRoundWins + dealerRoundWins != 0) {
-			System.out.println("\t***Current Score***");
-			System.out.println("Dealer : " + dealerRoundWins + "/t"+ p1.getName() + " : " + playerRoundWins);
-			System.out.println("/t***Menue***");
-			System.out.println("Continue on this deck 1)");
-			System.out.println("Play on a new deck 2)");
-			System.out.println("New game 3)");
-			
-			int userChoice = kb.nextInt();
-			if (userChoice == 1) {
-				
+		if ((playerRoundWins + dealerRoundWins) > 0) {
+			turnNumber = turnNumber + 1;
+			int userChoice = 0;
+			if (!(localDeck.size() == 52)) {
+				System.out.println("\t***Current Score***");
+				System.out.println("Dealer : " + dealerRoundWins + "\t" + p1.getName() + " : " + playerRoundWins);
+				System.out.println("\n\t***Menu***");
+				System.out.println("\nContinue on this deck 1)");
+				System.out.println("Play on a new deck 2)");
+				System.out.println("New game 3)");
 			}
-			if (userChoice == 2) {	
+			// Preselected menu choices in case of a new deck being created or a game started.
+			if (localDeck.size() <= 7) {
+				userChoice = 2;
+			}
+			if (localDeck.size() > 7) {
+				if (localDeck.size() == 52) {
+					userChoice = 1;
+				} else {
+					userChoice = kb.nextInt();
+				}
+			}
+			// Menu option results.
+			// Option one wishes the player luck and continues the game.
+			if (userChoice == 1) {
+				System.out.println("Good luck " + p1.getName());
+			}
+			// Change out localDeck for a new Deck.
+			if (userChoice == 2) {
 				localDeck = new ArrayList<>();
 				localDeck = d1.createDeck();
 				d1.suffleDeck(localDeck);
-				
+			// Option 3 begins a new game with a new player.
 			}
 			if (userChoice == 3) {
+				p1 = new Player();
+				playerRoundWins = 0;
+				dealerRoundWins = 0;
 				localDeck = new ArrayList<>();
 				localDeck = d1.createDeck();
 				d1.suffleDeck(localDeck);
 				playGame();
 			}
-			
+
 		}
 		do {
 			System.out.println("You are on turn : " + turnNumber);
@@ -65,61 +85,115 @@ public class GameDriver {
 				dealer.addToHand(localDeck.remove(i));
 
 			}
-			if (p1.getPlayerHandValue() == 21 && dealer.getDealerHandValue() == 21) {
+			if (p1.playerBlackjack() && dealer.dealerBlackJackCheck()) {
 				System.out.println("You both got a BlackJack");
+				dealerRoundWins = dealerRoundWins + 1;
+				playerRoundWins = playerRoundWins + 1;
+				playGame();
+
+			}
+			if (p1.playerBlackjack()) {
+				System.out.println("You got a BlackJack");
+				playerRoundWins = playerRoundWins + 1;
+				p1.showPlayerHand();
+				dealer.showDealerHand();
+				p1.discard();
+				dealer.discard();
+				playGame();
 			}
 			if (dealer.dealerBlackJackCheck()) {
 				System.out.println("Dealer has a BlackJack");
+				dealerRoundWins = dealerRoundWins + 1;
+				playGame();
 
 			} else {
 
-				System.out.println("\n" + p1.toString());
+				p1.showPlayerHand();
 				System.out.println("The dealer is showing " + dealer.showDraw1());
 				int userChoice;
 
 				do {
-					System.out.println("\n***Would you like to*** \nStay 1) \nHit 2) \nLeaveGame 00)");
+					System.out.println("\n **Enter 00 to Quit**");
+					System.out.println("***Would you like to*** \nPass 1) \nHit 2)");
 					userChoice = kb.nextInt();
 
 					if (userChoice == 1) {
 						while (dealer.dealerHitCheck()) {
 							dealer.addToHand(localDeck.remove(0));
 						}
-						break;
+						if (playerWin()) {
+							System.out.println("You won this round");
+							playerRoundWins = playerRoundWins + 1;
+							System.out.println("\t***Dealer Hand***");
+							dealer.showDealerHand();
+							p1.discard();
+							dealer.discard();
+							playGame();
+						}
+
+						if (playerWin() == false) {
+							System.out.println("You lost this round");
+							dealerRoundWins = dealerRoundWins + 1;
+							dealer.showDealerHand();
+							p1.discard();
+							dealer.discard();
+							playGame();
+						}
+						if (playerWin() == false && p1.getPlayerHandValue() == dealer.getDealerHandValue()) {
+							System.out.println("You tied the dealer");
+							dealerRoundWins = dealerRoundWins + 1;
+							playerRoundWins = playerRoundWins + 1;
+							dealer.showDealerHand();
+							p1.showPlayerHand();
+							p1.discard();
+							dealer.discard();
+							playGame();
+						}
 					}
 					if (userChoice == 2) {
 						p1.addToHand(localDeck.remove(0));
 						if (p1.playerBustCheck()) {
 							System.out.println("\tYou bust 21");
-							System.out.println(p1.toString());
+							p1.showPlayerHand();
+							dealerRoundWins = dealerRoundWins + 1;
+							p1.discard();
+							dealer.discard();
+							playGame();
 						}
 						if (p1.playerBustCheck() == false) {
-							System.out.println(p1.toString());
-
+							p1.showPlayerHand();
 						}
-					}
-					if (playerWin()) {
-						System.out.println("You won this round");
-						playerRoundWins = playerRoundWins + 1;
-
+					} else {
+						p1.discard();
+						dealer.discard();
+						playGame();
 					}
 
 				} while (userChoice != 00);
 			}
 
 		} while (localDeck.size() > 7);
+		System.out.println("This deck has been exausted.");
+		playGame();
 
 	}
 
 	private boolean playerWin() {
+
+		if (dealer.getDealerHandValue() > 21) {
+			return true;
+		}
 		if (p1.getPlayerHandValue() > dealer.getDealerHandValue()) {
 			return true;
+		}
+		if (dealer.getDealerHandValue() == 21) {
+			return false;
 		}
 		if (p1.getPlayerHandValue() < dealer.getDealerHandValue()) {
 			return false;
 		} else {
 			return false;
 		}
-	
+
 	}
 }

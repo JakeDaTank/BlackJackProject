@@ -12,4 +12,17 @@ attached to it in order to allow for the individual Cards to be counted and coun
 *Although many functions of a Dealer and Player are similar, I decided not to make an abstracted
 Person class because I wanted to keep the Dealer and the Player as separate as possible.
 
-*The Dealer I designed to have much of the functionality of a Player, however the Dealer has to be able to respond to the events on the board and make decisions 
+*Dealers I designed to have much of the functionality of a Player, however Dealers have to be able 
+to respond to the events on the board and return booleans based off of their current Hand.
+*Dealer was able to receive Cards into their Hand and determine the Value of those cards along 
+with discard that hand.
+*Based on Card Values the Dealer was able to make checks as to weather they had a BlackJack, 
+busted, or if the dealer should continue to hit.
+*Dealers are also able to show their first draw to the table and their whole hand when appropriate
+
+*Players much like dealers can receive and discard Cards. However unlike the Dealer class they do
+have name and have far less logic checking since that is left up to the Player.
+*Player does know if they have a BlackJack, if they have busted, and can show their cards to the 
+Table
+
+* much of the 
