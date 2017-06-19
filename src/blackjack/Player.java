@@ -12,13 +12,6 @@ public class Player {
 		return playerHand;
 	}
 
-	public boolean playerBustCheck() {
-		if (playerHandValue > 21) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
 	public String getName() {
 		return name;
@@ -54,6 +47,13 @@ public class Player {
 			return true;
 		}
 		else {
+			return false;
+		}
+	}
+	public boolean playerBustCheck() {
+		if (playerHandValue > 21) {
+			return true;
+		} else {
 			return false;
 		}
 	}

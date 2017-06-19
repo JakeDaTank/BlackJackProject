@@ -64,7 +64,7 @@ public class GameDriver {
 			// Option 3 begins a new game with a new player.
 			}
 			if (userChoice == 3) {
-				p1 = new Player();
+				p1 = new Player(); 
 				playerRoundWins = 0;
 				dealerRoundWins = 0;
 				localDeck = new ArrayList<>();
@@ -74,6 +74,7 @@ public class GameDriver {
 			}
 
 		}
+		//Start a round
 		do {
 			System.out.println("You are on turn : " + turnNumber);
 
@@ -113,7 +114,7 @@ public class GameDriver {
 				int userChoice;
 
 				do {
-					System.out.println("\n **Enter 00 to Quit**");
+					//System.out.println("\n **Enter 00 to Quit**");
 					System.out.println("***Would you like to*** \nPass 1) \nHit 2)");
 					userChoice = kb.nextInt();
 

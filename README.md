@@ -1,4 +1,4 @@
-##BlackJack Project
+## BlackJack Project
 								
 *First approach I took was to draw out a diagram of what a Card class would consist of.
 *After deciding that a Card needed a Suit and a Rank I decided to give each Rank a value 
@@ -25,4 +25,10 @@ have name and have far less logic checking since that is left up to the Player.
 *Player does know if they have a BlackJack, if they have busted, and can show their cards to the 
 Table
 
-* much of the 
+*The Game Driver did have a method that would compare the player and dealers score in various ways
+in order to determine if the match was a win, loss or draw. Both the player and Dealer received a 
+point for a win in order to keep the game logic running in the case of a first round draw and
+this is a flaw that I would like to address.
+*Much of the initial Game logic went by quickly after having set up the classes however, the most
+difficult part of the project was trying to loop through the game for multiple decks and keep the
+menu options organized in such a way that they appeared at the appropriate times.

@@ -47,6 +47,7 @@ public class Dealer {
 		}
 	}
 	public boolean dealerBustCheck(){
+		
 		if (dealerHandValue > 21) {
 			return true;
 		}
